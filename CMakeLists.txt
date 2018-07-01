@@ -1,0 +1,38 @@
+cmake_minimum_required(VERSION 3.11.0)
+project(airsimtest)
+
+set (AIRSIM_ROOT /home/houjebek/code/AirSim)
+
+#setup include and lib for rpclib which will be referenced by other projects
+set(RPCLIB_VERSION_FOLDER rpclib-2.2.1)
+set(RPC_LIB_INCLUDES " ${AIRSIM_ROOT}/external/rpclib/${RPCLIB_VERSION_FOLDER}/include")
+#name of .a file with lib prefix
+set(RPC_LIB rpc)
+message(STATUS "found RPC_LIB_INCLUDES=${RPC_LIB_INCLUDES}")
+
+include_directories(${AIRSIM_ROOT}/AirLib/deps/eigen3)
+
+set(CMAKE_CXX_FLAGS "\
+    -std=c++14 -ggdb -Wall -Wextra -Wstrict-aliasing -Wunreachable-code -Wcast-qual -Wctor-dtor-privacy \
+    -Wdisabled-optimization -Wformat=2 -Winit-self -Wmissing-include-dirs -Wswitch-default \
+    -Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow -Wstrict-overflow=5 -Wswitch-default -Wundef \
+    -Wno-variadic-macros -Wno-parentheses -Wno-unused-function -Wno-unused -Wno-documentation -fdiagnostics-show-option \
+    -pthread \
+    ${RPC_LIB_DEFINES} ${CMAKE_CXX_FLAGS}")
+      set(CXX_EXP_LIB "-lstdc++fs -fmax-errors=10 -Wnoexcept -Wstrict-null-sentinel")
+
+include_directories(
+  ${AIRSIM_ROOT}/AirLib/include
+  ${RPC_LIB_INCLUDES}
+  ${AIRSIM_ROOT}/MavLinkCom/include
+  ${AIRSIM_ROOT}/MavLinkCom/common_utils
+)
+
+link_directories(${AIRSIM_ROOT}/build_debug/output/lib/)
+
+add_executable(airsimtest "main.cpp")
+
+target_link_libraries(airsimtest ${AIRSIM_ROOT}/build_debug/output/lib/libAirLib.a)
+target_link_libraries(airsimtest ${AIRSIM_ROOT}/build_debug/output/lib/librpc.a)
+#target_link_libraries(airsimtest ${AIRSIM_ROOT}/build_debug/output/lib/libMavLinkCom.a)
+
