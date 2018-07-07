@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.11.0)
 project(airsimtest)
-
+#-DCMAKE_C_COMPILER=clang-5.0 -DCMAKE_CXX_COMPILER=clang++-5.0 gives all the weird __1 linking errors
 
 set (AIRSIM_ROOT /home/houjebek/code/AirSim)
 
@@ -32,6 +32,9 @@ set(CMAKE_CXX_FLAGS "\
     ${RPC_LIB_DEFINES} ${CMAKE_CXX_FLAGS}")
       set(CXX_EXP_LIB "-lstdc++fs -fmax-errors=10 -Wnoexcept -Wstrict-null-sentinel")
 
+      set(CMAKE_CXX_STANDARD 14)
+      set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 include_directories(
  ${AIRSIM_ROOT}/../airsim-test
   ${AIRSIM_ROOT}/AirLib/deps/eigen3
@@ -41,7 +44,7 @@ include_directories(
   ${AIRSIM_ROOT}/MavLinkCom/common_utils
 )
 
-#link_directories(${AIRSIM_ROOT}/build_debug/output/lib/)
+link_directories(${AIRSIM_ROOT}/build_debug/output/lib/)
 
 add_executable(airsimtest "main.cpp")
 
